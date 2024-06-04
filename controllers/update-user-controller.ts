@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/user';
+import UserModel from '../models/user-model';
 import HttpCodes from 'http-status-codes';
 import * as validator from 'validator';
 
@@ -7,7 +7,7 @@ export const updateUser = async (req: Request, res: Response) => {
     try {
         const {userId} = req.params;
         const {name, email} = req.body;
-        const user: User | null = await User.findByPk(userId);
+        const user: UserModel | null = await UserModel.findByPk(userId);
 
         if (!name || !email) {
             return res.status(HttpCodes.BAD_REQUEST).json({message: "User ID, name, and email address are required"});

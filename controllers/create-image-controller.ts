@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
-import Image from '../models/image';
+import Image from '../models/image-model';
 import {SharedErrors} from "../shared/errors/shared-errors";
 import HttpCodes from "http-status-codes";
 

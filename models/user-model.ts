@@ -4,13 +4,13 @@ import {UserInterface} from "../interface/User.interface";
 
 interface UserCreationAttributes extends Optional<UserInterface, 'userId'> {}
 
-class User extends Model<UserInterface, UserCreationAttributes> implements UserInterface {
+class UserModel extends Model<UserInterface, UserCreationAttributes> implements UserInterface {
     public userId!: string;
     public name!: string;
     public email!: string;
 }
 
-User.init({
+UserModel.init({
     userId: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -29,8 +29,8 @@ User.init({
 }, {
     sequelize,
     tableName: 'Users',
-    modelName: 'User',
+    modelName: 'UserModel',
     timestamps: true,
 });
 
-export default User;
+export default UserModel;

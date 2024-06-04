@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import HttpCodes from "http-status-codes";
 import {SharedErrors} from "../shared/errors/shared-errors";
-import Image from "../models/image";
+import Image from "../models/image-model";
 import {ImageInterface} from "../interface/Image.interface";
 
 export const getImages = async (req: Request, res: Response) => {

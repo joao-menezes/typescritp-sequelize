@@ -72,13 +72,13 @@ Start the development server:
 npm run start
 ```
 # API Endpoints
-### User Endpoints
-* Create User
+### UserModel Endpoints
+* Create UserModel
     * POST /api/users
     * Request Body: { "name": "John Doe", "email": "john@example.com" }
-* Get User
+* Get UserModel
     * GET /api/users/:id
-    * Response: User data
+    * Response: UserModel data
 * PUT /api/users/:id
     * Request Body: { "name": "John Doe", "email": "john@example.com" }
     * Response: Updated user data

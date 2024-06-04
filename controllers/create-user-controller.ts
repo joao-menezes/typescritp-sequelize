@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import User from "../models/user";
+import UserModel from "../models/user-model";
 import {UserInterface} from "../interface/User.interface";
 import HttpCodes from "http-status-codes";
 import * as validator from "validator";
@@ -17,7 +17,7 @@ export const createUser = async (req: Request, res: Response) => {
             return res.status(HttpCodes.BAD_REQUEST).json(SharedErrors.InvalidEmailFormat);
         }
 
-        const userCreated: UserInterface = await User.create({name, email});
+        const userCreated: UserInterface = await UserModel.create({name, email});
         res.status(HttpCodes.CREATED).json({
             code: HttpCodes.CREATED,
             userCreated

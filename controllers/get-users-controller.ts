@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import User from "../models/user";
+import UserModel from "../models/user-model";
 import {UserInterface} from "../interface/User.interface";
 import HttpCodes from "http-status-codes";
 import {SharedErrors} from "../shared/errors/shared-errors";
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
-        const users: UserInterface[] = await User.findAll();
+        const users: UserInterface[] = await UserModel.findAll();
         if (!users.length) {
             return res.status(HttpCodes.BAD_REQUEST).json({
                 code: HttpCodes.BAD_REQUEST,
@@ -23,7 +23,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
     try {
         const {userId} = req.params;
-        const user = await User.findOne({ where: { userId } });
+        const user = await UserModel.findOne({ where: { userId } });
 
         if (!user) {
             return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.UserNotFound);
