@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import HttpCodes from "http-status-codes";
 import {SharedErrors} from "../shared/errors/shared-errors";
 import Image from "../models/image-model";
@@ -7,11 +7,9 @@ import {ImageInterface} from "../interface/Image.interface";
 export const getImages = async (req: Request, res: Response) => {
     try {
         const images: ImageInterface[] = await Image.findAll();
-        if (!images.length) {
-            return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.ImageNotFound);
-        }
+        if (!images.length) return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.ImageNotFound);
 
-        const imageData = images.map(image => image.data);
+        const imageData: Buffer[] = images.map(image => image.data);
 
         res.set('Content-Type', 'image/jpeg');
         res.send(imageData);
@@ -21,11 +19,10 @@ export const getImages = async (req: Request, res: Response) => {
     }
 };
 
-
 export const getImage = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-        const image = await Image.findByPk(id);
+        const { imageId } = req.params;
+        const image = await Image.findByPk(imageId);
 
         if (!image) {
             return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.ImageNotFound);
@@ -35,6 +32,6 @@ export const getImage = async (req: Request, res: Response) => {
         res.send(image.data);
     } catch (error) {
         console.error('Error fetching image:', error);
-        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json(SharedErrors.ImageNotFound);
+        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({error: SharedErrors.InternalServerError});
     }
 };

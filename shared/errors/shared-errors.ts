@@ -19,6 +19,13 @@ export class SharedErrors {
         }
     }
 
+    static get InvalidEmailOrNameFormat() {
+        return {
+            code: HttpCodes.BAD_GATEWAY,
+            message: "Invalid email or name format"
+        }
+    }
+
     static get ErrorUploadImage(){
         return {
             code: HttpCodes.INTERNAL_SERVER_ERROR,

@@ -8,13 +8,10 @@ export const getUsers = async (req: Request, res: Response) => {
     try {
         const users: UserInterface[] = await UserModel.findAll();
         if (!users.length) {
-            return res.status(HttpCodes.BAD_REQUEST).json({
-                code: HttpCodes.BAD_REQUEST,
-                message:"Users not found",
-            });
+            return res.status(HttpCodes.BAD_REQUEST).json(SharedErrors.UserNotFound);
         }
 
-        res.json(users)
+        res.json({Users: users})
     } catch (error) {
         res.status(HttpCodes.INTERNAL_SERVER_ERROR).json(SharedErrors.InternalServerError);
     }
@@ -23,15 +20,13 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
     try {
         const {userId} = req.params;
-        const user = await UserModel.findOne({ where: { userId } });
+        const user: UserModel | null = await UserModel.findOne({ where: { userId } });
 
-        if (!user) {
-            return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.UserNotFound);
-        }
+        if (!user) return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.UserNotFound);
 
         return res.status(HttpCodes.OK).json(user);
     } catch (error) {
         console.error('Error fetching user:', error);
-        return res.status(HttpCodes.INTERNAL_SERVER_ERROR).json(SharedErrors.InternalServerError);
+        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({error: SharedErrors.InternalServerError});
     }
 };

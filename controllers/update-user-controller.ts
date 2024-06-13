@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import UserModel from '../models/user-model';
 import HttpCodes from 'http-status-codes';
 import * as validator from 'validator';
+import userModel from "../models/user-model";
+import {SharedErrors} from "../shared/errors/shared-errors";
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
@@ -9,21 +11,15 @@ export const updateUser = async (req: Request, res: Response) => {
         const {name, email} = req.body;
         const user: UserModel | null = await UserModel.findByPk(userId);
 
-        if (!name || !email) {
-            return res.status(HttpCodes.BAD_REQUEST).json({message: "User ID, name, and email address are required"});
-        }
+        if (!name || !email) return res.status(HttpCodes.BAD_REQUEST).json(SharedErrors.InvalidEmailOrNameFormat);
 
-        if (!validator.isEmail(email)) {
-            return res.status(HttpCodes.BAD_REQUEST).json({message: "Invalid email format"});
-        }
+        if (!validator.isEmail(email)) return res.status(HttpCodes.BAD_REQUEST).json(SharedErrors.InvalidEmailFormat);
 
-        if (!user) {
-            return res.status(HttpCodes.NOT_FOUND).json({message: "User not found"});
-        }
+        if (!user) return res.status(HttpCodes.NOT_FOUND).json(SharedErrors.UserNotFound);
 
         user.name = name;
         user.email = email;
-        const userUpdated = await user.save();
+        const userUpdated: userModel = await user.save();
 
         res.status(HttpCodes.OK).json({
             code: HttpCodes.OK,
@@ -31,9 +27,6 @@ export const updateUser = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error(`Error updating user: ${error}`);
-        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({
-            code: HttpCodes.INTERNAL_SERVER_ERROR,
-            error: 'Internal Server Error'
-        });
+        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({error: SharedErrors.InternalServerError});
     }
 };

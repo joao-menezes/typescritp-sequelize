@@ -9,13 +9,9 @@ export const createUser = async (req: Request, res: Response) => {
     try {
         const {name, email} = req.body;
 
-        if (!name || !email) {
-            return res.status(HttpCodes.BAD_REQUEST).json({message: "Name and email address is required"});
-        }
+        if (!name || !email) return res.status(HttpCodes.BAD_REQUEST).json({message: "Name and email address is required"});
 
-        if(!validator.isEmail(email)){
-            return res.status(HttpCodes.BAD_REQUEST).json(SharedErrors.InvalidEmailFormat);
-        }
+        if(!validator.isEmail(email)) return res.status(HttpCodes.BAD_REQUEST).json(SharedErrors.InvalidEmailFormat);
 
         const userCreated: UserInterface = await UserModel.create({name, email});
         res.status(HttpCodes.CREATED).json({
@@ -24,9 +20,6 @@ export const createUser = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error(`Error creating user: ${error}`);
-        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({
-            code: HttpCodes.INTERNAL_SERVER_ERROR,
-            error: 'Internal Server Error'
-        });
+        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({error: SharedErrors.InternalServerError});
     }
 };

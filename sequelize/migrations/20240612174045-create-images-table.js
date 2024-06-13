@@ -1,23 +1,21 @@
 'use strict';
 
-const {DataTypes} = require("sequelize");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Users', {
-      userId: {
+    await queryInterface.createTable('Images', {
+      imageId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
         allowNull: false,
-        primaryKey: true
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      email: {
+      filename: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+      },
+      data: {
+        type: Sequelize.BLOB('long'),
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +29,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Images');
   }
 };

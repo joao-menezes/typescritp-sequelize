@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import fs from 'fs';
 import path from 'path';
 import Image from '../models/image-model';
@@ -7,12 +7,10 @@ import HttpCodes from "http-status-codes";
 
 export const uploadImage = async (req: Request, res: Response) => {
     try {
-        if (!req.file) {
-            return res.status(HttpCodes.BAD_GATEWAY).json(SharedErrors.WrongFileType);
-        }
+        if (!req.file) return res.status(HttpCodes.BAD_GATEWAY).json(SharedErrors.WrongFileType);
 
-        const filePath = path.join(__dirname, '../uploads', req.file.filename);
-        const fileData = fs.readFileSync(filePath);
+        const filePath: string = path.join(__dirname, '../uploads', req.file.filename);
+        const fileData: Buffer = fs.readFileSync(filePath);
 
         const newImage = await Image.create({
             filename: req.file.filename,
@@ -22,11 +20,11 @@ export const uploadImage = async (req: Request, res: Response) => {
         fs.unlinkSync(filePath);
 
         res.status(HttpCodes.CREATED).json({
-            message: 'Image uploaded and stored successfully',
+            message: HttpCodes.CREATED,
             imageId: newImage.imageId,
         });
     } catch (error) {
         console.error('Error uploading image:', error);
-        res.status(500).json(SharedErrors.ErrorUploadImage);
+        res.status(HttpCodes.INTERNAL_SERVER_ERROR).json(SharedErrors.ErrorUploadImage);
     }
 };

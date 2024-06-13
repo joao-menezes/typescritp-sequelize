@@ -4,13 +4,13 @@ import sequelize from "../sequelize/database";
 
 interface ImageCreationAttributes extends Optional<ImageInterface, 'imageId'> {}
 
-class Image extends Model<ImageInterface, ImageCreationAttributes> implements ImageInterface {
+class ImageModel extends Model<ImageInterface, ImageCreationAttributes> implements ImageInterface {
     public imageId!: string;
     public data!: Buffer;
     public filename!: string;
 }
 
-Image.init({
+ImageModel.init({
     imageId: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -27,7 +27,9 @@ Image.init({
     },
 }, {
     sequelize,
-    tableName: 'images',
+    tableName: 'Images',
+    modelName: 'ImageModel',
+    timestamps: true,
 });
 
-export default Image;
+export default ImageModel;

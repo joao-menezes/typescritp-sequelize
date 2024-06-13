@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create an S3 bucket and an RDS instance.
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: sequelize-ts
+
+  RDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: sequelize-ts-joao
+      AllocatedStorage: 20
+      DBInstanceClass: db.t3.micro
+      Engine: mysql
+      EngineVersion: '8.0.32'
+      MasterUsername: joaogabr
+      MasterUserPassword: '12345678'
+      DBName: sequelizeTs
+      VPCSecurityGroups:
+        - !GetAtt MyDBSecurityGroup.GroupId
+  
+  MyDBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow access to RDS instance"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      VpcId: vpc-097f88c2b38255b01
+
+Outputs:
+  BucketName:
+    Description: "Name of the S3 bucket"
+    Value: !Ref S3Bucket
+
+  RDSInstanceEndpoint:
+    Description: "Endpoint of the RDS instance"
+    Value: !GetAtt RDSInstance.Endpoint.Address
+
+  RDSInstancePort:
+    Description: "Port of the RDS instance"
+    Value: !GetAtt RDSInstance.Endpoint.Port
