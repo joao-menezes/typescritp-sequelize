@@ -4,7 +4,7 @@ import sequelize from "../sequelize/database";
 
 interface ImageCreationAttributes extends Optional<ImageInterface, 'imageId'> {}
 
-class ImageModel extends Model<ImageInterface, ImageCreationAttributes> implements ImageInterface {
+class ImageModel extends Model<ImageInterface> implements ImageInterface {
     public imageId!: string;
     public data!: Buffer;
     public filename!: string;

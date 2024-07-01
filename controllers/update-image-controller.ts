@@ -3,6 +3,9 @@ import HttpCodes from 'http-status-codes';
 import ImageModel from "../models/image-model";
 import imageModel from "../models/image-model";
 import {SharedErrors} from "../shared/errors/shared-errors";
+import logger from "../logger";
+
+const _fileName = module.filename.split("/").pop();
 
 export const updateImage = async (req: Request, res: Response) => {
     try {
@@ -17,8 +20,9 @@ export const updateImage = async (req: Request, res: Response) => {
             code: HttpCodes.OK,
             imageUpdated
         });
+        logger.info(`Image updated with successfully - ${_fileName}`);
     } catch (error) {
-        console.error(`Error updating user: ${error}`);
+        logger.error(`Error updating image: ${error} - ${_fileName}`);
         res.status(HttpCodes.INTERNAL_SERVER_ERROR).json({error: SharedErrors.InternalServerError});
     }
 };

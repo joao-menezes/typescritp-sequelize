@@ -3,11 +3,14 @@ import sequelize from './sequelize/database';
 import dotenv from 'dotenv';
 import routes from "./routes/routes";
 import HttpCodes from "http-status-codes";
+import logger from "./logger";
 
 dotenv.config();
 
+const _fileName = module.filename.split("/").pop();
+
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use('/api', routes);
@@ -17,11 +20,12 @@ app.listen(port, async () => {
        try {
            await sequelize.authenticate();
            // await sequelize.sync({force: true});
-           console.log(`Server is running on http://localhost:${port}`);
+           logger.info(`Server is running on http://localhost:${port} - ${_fileName}`);
+
            response.status(HttpCodes.OK);
        } catch (error) {
            response.status(HttpCodes.BAD_GATEWAY);
-           console.error(`Unable to connect to the database: ${error}`);
+           logger.error(`Unable to run server: ${error} - ${_fileName}`);
        }
    }
 });

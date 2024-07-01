@@ -1,6 +1,6 @@
-import {DataTypes, Model, Optional} from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize/database';
-import {UserInterface} from "../interface/User.interface";
+import { UserInterface } from "../interface/User.interface";
 
 interface UserCreationAttributes extends Optional<UserInterface, 'userId'> {}
 
@@ -8,6 +8,9 @@ class UserModel extends Model<UserInterface, UserCreationAttributes> implements 
     public userId!: string;
     public name!: string;
     public email!: string;
+
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 UserModel.init({
@@ -20,11 +23,34 @@ UserModel.init({
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+            notNull: {
+                msg: 'Name is required'
+            },
+            notEmpty: {
+                msg: 'Name cannot be empty'
+            },
+            len: {
+                args: [2, 100],
+                msg: 'Name must be between 2 and 100 characters'
+            }
+        }
     },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+            notNull: {
+                msg: 'Email is required'
+            },
+            notEmpty: {
+                msg: 'Email cannot be empty'
+            },
+            isEmail: {
+                msg: 'Must be a valid email address'
+            }
+        }
     }
 }, {
     sequelize,

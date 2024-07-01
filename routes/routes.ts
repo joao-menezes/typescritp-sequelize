@@ -9,6 +9,7 @@ import {deleteImage} from "../controllers/delete-image-controller";
 import {updateImage} from "../controllers/update-image-controller";
 
 import upload from "../middleware/multer-config";
+import HttpCodes from "http-status-codes";
 
 const router = Router();
 
@@ -24,6 +25,8 @@ router.get('/image/:imageId', getImage);
 router.put('/image/:imageId', updateImage);
 router.delete('/image/:imageId', deleteImage);
 
-router.get('/health-check', (req, res) => {res.send('healthy');});
+router.get('/health-check', (req, res) => {
+    res.status(HttpCodes.OK).send('Server is healthy');
+});
 
 export default router;

@@ -19,10 +19,10 @@ export class SharedErrors {
         }
     }
 
-    static get InvalidEmailOrNameFormat() {
+    static get InvalidNameFormat() {
         return {
             code: HttpCodes.BAD_GATEWAY,
-            message: "Invalid email or name format"
+            message: "Invalid name format"
         }
     }
 
@@ -52,5 +52,12 @@ export class SharedErrors {
             code: HttpCodes.NOT_FOUND,
             message: 'Image Not Found'
         };
+    }
+
+    static get EmailAlreadyExists(){
+        return {
+            code: HttpCodes.NOT_FOUND,
+            message: 'Email Already Exists'
+        }
     }
 }

@@ -1,9 +1,12 @@
 import {Request, Response} from 'express';
 import fs from 'fs';
 import path from 'path';
-import Image from '../models/image-model';
 import {SharedErrors} from "../shared/errors/shared-errors";
 import HttpCodes from "http-status-codes";
+import logger from "../logger";
+import ImageModel from "../models/image-model";
+
+const _fileName = module.filename.split("/").pop();
 
 export const uploadImage = async (req: Request, res: Response) => {
     try {
@@ -12,7 +15,7 @@ export const uploadImage = async (req: Request, res: Response) => {
         const filePath: string = path.join(__dirname, '../uploads', req.file.filename);
         const fileData: Buffer = fs.readFileSync(filePath);
 
-        const newImage = await Image.create({
+        const newImage = await ImageModel.create({
             filename: req.file.filename,
             data: fileData,
         });
@@ -23,8 +26,10 @@ export const uploadImage = async (req: Request, res: Response) => {
             message: HttpCodes.CREATED,
             imageId: newImage.imageId,
         });
+        logger.info(`Image uploaded successfully - ${_fileName}`)
     } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error('', error);
+        logger.error(`Error uploading image: ${error} - ${_fileName}`);
         res.status(HttpCodes.INTERNAL_SERVER_ERROR).json(SharedErrors.ErrorUploadImage);
     }
 };
