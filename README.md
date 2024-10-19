@@ -69,7 +69,7 @@ npm run db:seed:all
 Start the development server:
 
 ```shell
-npm run start
+npm start
 ```
 # API Endpoints
 ### UserModel Endpoints
